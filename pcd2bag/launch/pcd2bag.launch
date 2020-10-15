@@ -1,7 +1,7 @@
 <!-- -->
 <launch>
   <node pkg="pcd2bag" type="pcd2bag_node" name="pcd2bag_node" output="screen">
-    <param name="filename" value="/home/eaksu3/Downloads/pcd_files_only32bag"/>
+    <param name="filename" value="/home/eaksu3/Datasets/pcd_data_lidar3"/>
     <param name="topicname" value="/points"/>
     <param name="hertz" value="10"/>
   </node>

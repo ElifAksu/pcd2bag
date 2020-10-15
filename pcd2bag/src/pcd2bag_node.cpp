@@ -35,19 +35,26 @@ int main(int argc, char** argv)
 	nn.getParam("filename", filename_in);
 	nn.getParam("topicname", topicname_in);
 	nn.getParam("hertz", time);
+	vector<std::experimental::filesystem::v1::path> pathvector;
     rospoint_pub = nh.advertise<sensor_msgs::PointCloud2> (topicname_in, 1);
 		//pcd file reader    
 	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
     for (const auto& dirEntry : recursive_directory_iterator(filename_in))
 	{
-	std::cout << dirEntry << std::endl;
-	pcl::io::loadPCDFile<pcl::PointXYZ> (dirEntry.path(), *cloud);
+	   pathvector.push_back(dirEntry.path());
+	   std::cout << dirEntry << std::endl;
+	}
+	sort(pathvector.begin(), pathvector.end()); 
+	for(int i =0; i<= pathvector.size(); i++)
+	{
+	std::cout << pathvector[i] << std::endl;
+	pcl::io::loadPCDFile<pcl::PointXYZ> (pathvector[i], *cloud);
 	sensor_msgs::PointCloud2 output;
  	pcl::toROSMsg(*cloud, output);
 	output.header.frame_id= "base_link";
 	output.header.stamp =ros::Time::now();
  	rospoint_pub.publish(output);
-	 sleep((1/time));
+	 sleep(1);
 	}	
 
     return 0;
